@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { Channel, Message, supabase } from '../lib/supabase'
+import { supabase } from '../lib/supabase'
+import type { Channel, Message } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import MessageItem from '../components/MessageItem'
 import MessageInput from '../components/MessageInput'
@@ -76,56 +77,45 @@ export default function ChannelView({ channel }: ChannelViewProps) {
   }, [messages])
 
   const handleSend = async (content: string, files: File[]) => {
-    if (!user) throw new Error('You must be signed in to send a message.')
-    if (!content.trim() && files.length === 0) return
-
+    if (!user || !profile) return
     const uploadedPaths: string[] = []
+
     const cleanupUploads = async () => {
-      if (uploadedPaths.length) {
-        await supabase.storage.from('attachments').remove(uploadedPaths)
-      }
+      if (uploadedPaths.length === 0) return
+      await supabase.storage.from('attachments').remove(uploadedPaths)
     }
 
-    // Upload files first. Their database records are created only after
-    // the parent message exists, as required by the attachment RLS policy.
     try {
-      for (const file of files) {
-        const rawExtension = file.name.includes('.') ? file.name.split('.').pop() : ''
-        const extension = rawExtension && /^[a-zA-Z0-9]{1,10}$/.test(rawExtension) ? rawExtension.toLowerCase() : 'bin'
-        const filePath = `${user.id}/${crypto.randomUUID()}.${extension}`
-        const { error: uploadError } = await supabase.storage
-          .from('attachments')
-          .upload(filePath, file, { contentType: file.type, upsert: false })
-        if (uploadError) throw new Error(`Could not upload ${file.name}: ${uploadError.message}`)
-        uploadedPaths.push(filePath)
-      }
-
-      const { data: message, error: messageError } = await supabase
+      const { data: message, error } = await supabase
         .from('messages')
         .insert({
           channel_id: channel.id,
           user_id: user.id,
-          content: content.trim(),
+          content,
           parent_id: replyingTo?.id || null
         })
         .select()
         .single()
 
-      if (messageError || !message) throw new Error(messageError?.message || 'The message could not be created.')
+      if (error) throw error
 
       if (files.length > 0) {
-        const attachmentRows = files.map((file, index) => ({
-          message_id: message.id,
-          url: uploadedPaths[index],
-          type: file.type.startsWith('audio/') ? 'audio' as const : 'image' as const,
-          filename: file.name,
-          size: file.size
-        }))
-
-        const { error: attachmentError } = await supabase
-          .from('attachments')
-          .insert(attachmentRows)
-
+        const attachments = []
+        for (const file of files) {
+          const ext = file.name.split('.').pop()
+          const path = `${user.id}/${message.id}/${Date.now()}.${ext}`
+          const { error: uploadError } = await supabase.storage.from('attachments').upload(path, file)
+          if (uploadError) throw uploadError
+          uploadedPaths.push(path)
+          attachments.push({
+            message_id: message.id,
+            url: path,
+            type: file.type.startsWith('image/') ? 'image' : 'audio',
+            filename: file.name,
+            size: file.size
+          })
+        }
+        const { error: attachmentError } = await supabase.from('attachments').insert(attachments)
         if (attachmentError) {
           await supabase.from('messages').delete().eq('id', message.id)
           throw new Error(`The message was not saved with its attachments: ${attachmentError.message}`)
@@ -175,15 +165,9 @@ export default function ChannelView({ channel }: ChannelViewProps) {
       )}
 
       {canPost ? (
-        <MessageInput
-          onSend={handleSend}
-          placeholder={replyingTo ? `Reply to ${replyingTo.profiles?.display_name || 'message'}...` : `Message #${channel.name}`}
-          allowAudio={channel.slug === 'the-soundboard'}
-        />
+        <MessageInput onSend={handleSend} placeholder={replyingTo ? `Reply to ${replyingTo.profiles?.display_name || 'message'}...` : `Message #${channel.name}`} allowAudio={channel.slug === 'the-soundboard'} />
       ) : (
-        <div className="px-4 py-4 text-center text-sm text-parchment/50 border-t border-bronze/20">
-          Only administrators can post in #announcements
-        </div>
+        <div className="px-4 py-4 text-center text-sm text-parchment/50 border-t border-bronze/20">Only administrators can post in #announcements</div>
       )}
     </div>
   )
