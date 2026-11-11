@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { supabase, InviteCode, Profile } from '../lib/supabase'
+import { supabase, type InviteCode, type Profile } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import { X, Copy, Check, UserX } from 'lucide-react'
 
@@ -61,7 +61,7 @@ export default function AdminPanel({ onClose }: AdminPanelProps) {
     setTimeout(() => setCopied(false), 2000)
   }
 
-  const deactivateMember = async (memberId: string) => {
+  const deactivateMember = async (_memberId: string) => {
     if (!confirm('Remove this member from the community?')) return
     // In a full implementation, you would ban the user or delete their profile
     // For now, we can set a flag or use Supabase admin to disable the user
