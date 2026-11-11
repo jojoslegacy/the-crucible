@@ -1,4 +1,4 @@
-import { Message } from '../lib/supabase'
+import { type Message } from '../lib/supabase'
 import { formatDistanceToNow } from 'date-fns'
 import { Reply, Pin } from 'lucide-react'
 
