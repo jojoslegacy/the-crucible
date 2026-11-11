@@ -4,7 +4,7 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Layout from './components/Layout'
 import ChannelView from './pages/ChannelView'
-import { supabase, Channel } from './lib/supabase'
+import { supabase, type Channel } from './lib/supabase'
 
 function App() {
   const { user, profile, loading } = useAuth()
