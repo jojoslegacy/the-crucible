@@ -1,4 +1,4 @@
-import { Channel } from '../lib/supabase'
+import { type Channel } from '../lib/supabase'
 
 interface ChannelListProps {
   channels: Channel[]
