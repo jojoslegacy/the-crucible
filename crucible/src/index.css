@@ -7,7 +7,7 @@ body {
   font-family: Inter, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #1a1612;
+  background-color: #0f0c0a;
   color: #f5f0e6;
 }
 
@@ -20,24 +20,83 @@ body {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #1a1612;
+  background: #0f0c0a;
 }
 ::-webkit-scrollbar-thumb {
   background: #3a322c;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #b08d57;
+  background: #c9a87a;
 }
 
-
-/* The Crucible visual identity */
+/* The Crucible visual identity — forge & fellowship */
 :root { color-scheme: dark; }
-.auth-shell { position: relative; isolation: isolate; overflow: hidden; background: #17120f; }
-.auth-shell::before { content: ""; position: absolute; inset: 0; z-index: -2; background: linear-gradient(90deg, rgba(16,12,10,.94) 0%, rgba(16,12,10,.78) 48%, rgba(16,12,10,.42) 100%), url('/images/forge-banner.webp') center 43% / cover no-repeat; transform: scale(1.015); }
-.auth-shell::after { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(ellipse at 50% 48%, rgba(199,112,54,.14), transparent 58%); pointer-events: none; }
-.auth-content { position: relative; padding: 2.25rem; border: 1px solid rgba(190,145,86,.27); border-radius: 18px; background: rgba(22,17,14,.82); box-shadow: 0 24px 80px rgba(0,0,0,.45), inset 0 1px rgba(255,226,180,.06); backdrop-filter: blur(14px); }
-.auth-mark { width: 104px; height: 104px; object-fit: cover; border-radius: 22px; margin: 0 auto 1.1rem; border: 1px solid rgba(213,164,99,.55); box-shadow: 0 8px 34px rgba(210,105,43,.22); }
-.sidebar-mark { width: 38px; height: 38px; object-fit: cover; border-radius: 9px; border: 1px solid rgba(190,145,86,.45); }
+
+.auth-shell {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #0f0c0a;
+  min-height: 100vh;
+}
+
+.auth-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(ellipse at 70% 40%, rgba(199,112,54,.28), transparent 55%),
+    radial-gradient(ellipse at 20% 80%, rgba(176,141,87,.18), transparent 50%),
+    linear-gradient(135deg, #0f0c0a 0%, #1a1612 40%, #2a1f18 100%);
+}
+
+.auth-shell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: url('/images/forge-banner.webp') center 40% / cover no-repeat;
+  opacity: 0.35;
+  mix-blend-mode: luminosity;
+  pointer-events: none;
+}
+
+.auth-content {
+  position: relative;
+  padding: 2.5rem 2rem;
+  border: 1px solid rgba(201,168,122,.35);
+  border-radius: 20px;
+  background: rgba(15,12,10,.78);
+  box-shadow:
+    0 30px 90px rgba(0,0,0,.55),
+    inset 0 1px rgba(255,226,180,.08),
+    0 0 40px rgba(199,112,54,.12);
+  backdrop-filter: blur(16px);
+}
+
+.auth-mark {
+  width: 112px;
+  height: 112px;
+  object-fit: cover;
+  border-radius: 24px;
+  margin: 0 auto 1.25rem;
+  border: 2px solid rgba(201,168,122,.6);
+  box-shadow: 0 10px 40px rgba(199,112,54,.35);
+}
+
+.sidebar-mark {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid rgba(201,168,122,.5);
+}
+
 input, button { -webkit-tap-highlight-color: transparent; }
-@media (max-width: 520px) { .auth-content { padding: 1.5rem 1.15rem; } .auth-mark { width: 84px; height: 84px; } .auth-shell::before { background-position: 52% center; } }
+
+@media (max-width: 520px) {
+  .auth-content { padding: 1.75rem 1.25rem; }
+  .auth-mark { width: 88px; height: 88px; }
+}
