@@ -1,5 +1,5 @@
-import { ReactNode, useState } from 'react'
-import { Channel } from '../lib/supabase'
+import { type ReactNode, useState } from 'react'
+import { type Channel } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import { Menu, X, LogOut, Settings, Users } from 'lucide-react'
 import ChannelList from './ChannelList'
