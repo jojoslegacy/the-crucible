@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { Channel, Message, supabase } from '../lib/supabase'
+import { type Channel, type Message, supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import MessageItem from '../components/MessageItem'
 import MessageInput from '../components/MessageInput'
