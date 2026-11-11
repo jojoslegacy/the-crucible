@@ -31,9 +31,14 @@ export default function Login({ onSwitchToSignup }: LoginProps) {
     <div className="auth-shell min-h-screen flex items-center justify-center px-4">
       <div className="auth-content w-full max-w-md">
         <div className="text-center mb-8">
-          <img src="/images/app-icon.png" alt="The Crucible forge emblem" className="auth-mark" />
+          <img
+            src="/images/app-icon.png"
+            alt="The Crucible forge emblem"
+            className="auth-mark"
+          />
           <h1 className="text-4xl font-serif text-bronze tracking-wider">THE CRUCIBLE</h1>
-          <p className="text-parchment/70 mt-2 text-sm tracking-wide">Truth Before Talent.</p>
+          <p className="text-parchment/60 mt-1 text-xs tracking-[0.2em] uppercase">Christian Music Collaborative</p>
+          <p className="text-parchment/70 mt-3 text-sm tracking-wide">Truth Before Talent.</p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-5">
