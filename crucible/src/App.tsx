@@ -4,7 +4,8 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Layout from './components/Layout'
 import ChannelView from './pages/ChannelView'
-import { supabase, Channel } from './lib/supabase'
+import { supabase } from './lib/supabase'
+import type { Channel } from './lib/supabase'
 
 function App() {
   const { user, profile, loading } = useAuth()
@@ -26,7 +27,6 @@ function App() {
     
     if (!error && data) {
       setChannels(data as Channel[])
-      // Default to welcome or first channel
       const welcome = data.find(c => c.slug === 'welcome')
       setCurrentChannel(welcome || data[0] || null)
     }
